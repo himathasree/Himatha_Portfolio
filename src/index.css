@@ -1,0 +1,85 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-bg: 242 247 255;
+  --color-panel: 255 255 255;
+  --color-panel-soft: 239 245 255;
+  --color-text: 27 41 72;
+  --color-muted: 91 112 150;
+  --color-brand: 47 110 255;
+  --color-brand-alt: 0 171 225;
+  --color-border-soft: 203 219 246;
+}
+
+html.dark {
+  color-scheme: dark;
+  --color-bg: 9 15 31;
+  --color-panel: 16 25 52;
+  --color-panel-soft: 13 23 48;
+  --color-text: 215 226 255;
+  --color-muted: 140 160 207;
+  --color-brand: 63 124 255;
+  --color-brand-alt: 53 200 255;
+  --color-border-soft: 30 43 80;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(47 110 255) rgb(225 235 252);
+}
+
+html.dark * {
+  scrollbar-color: rgb(63 124 255) rgb(10 18 38);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply m-0 bg-bg text-text font-sans antialiased;
+  font-family: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  background-image:
+    radial-gradient(1000px 500px at 10% -10%, rgba(64, 134, 255, 0.2), transparent 60%),
+    radial-gradient(900px 500px at 90% -10%, rgba(20, 186, 234, 0.14), transparent 60%),
+    linear-gradient(180deg, #f4f8ff 0%, #edf4ff 100%);
+}
+
+html.dark body {
+  background-image:
+    radial-gradient(1000px 500px at 10% -10%, rgba(53, 200, 255, 0.14), transparent 60%),
+    radial-gradient(900px 500px at 90% -10%, rgba(63, 124, 255, 0.16), transparent 60%),
+    linear-gradient(180deg, #090f1f 0%, #0b1226 100%);
+}
+
+section {
+  @apply scroll-mt-[80px];
+}
+
+.container-base {
+  @apply mx-auto w-full max-w-6xl px-6 lg:px-8;
+}
+
+.glass {
+  @apply border border-borderSoft/70 bg-panel/80 backdrop-blur;
+}
+
+.section-space {
+  @apply py-20 md:py-24;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
