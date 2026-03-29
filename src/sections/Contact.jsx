@@ -93,17 +93,17 @@ export default function Contact() {
   }
 };
   return (
-    <section id="contact" className="scroll-mt-[84px] py-12 md:py-14 lg:py-12 xl:py-16">
+    <section id="contact" className="scroll-mt-24 py-12 md:py-14 lg:py-12 xl:py-16">
       <div className="container-base">
         <SectionHeading
           title="Get In Touch"
-          subtitle="Replace this with your preferred contact copy. Hook the form to Formspree, EmailJS, or your backend later."
+          subtitle="Feel free to reach out for opportunities, collaborations, or just a quick chat. I’m always open to discussing new ideas and building meaningful projects."
         />
 
-        <div className="grid gap-4 md:gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:gap-5">
-          <aside className="glass rounded-2xl p-5 md:p-6">
+        <div className="grid items-stretch gap-4 md:gap-5 lg:grid-cols-[0.85fr_1.15fr] lg:gap-5">
+          <aside className="glass h-full rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:p-7">
             <h3 className="text-3xl font-bold text-text">Contact Information</h3>
-            <p className="mt-4 text-lg text-muted">Fill up the form and I will get back to you as soon as possible.</p>
+            <p className="mt-4 text-lg text-muted">Have a project idea, opportunity, or question? I’d love to hear from you. Send me a message and I’ll get back to you as soon as possible.</p>
 
             <div className="mt-6 space-y-4">
               <p className="flex items-center gap-3 text-muted">
@@ -120,28 +120,28 @@ export default function Contact() {
               </p>
             </div>
 
-            <h4 className="mt-8 text-xl font-semibold text-text">Connect with me</h4>
-            <div className="mt-4 flex gap-3">
-              <a className="glass rounded-full p-3 text-muted hover:text-text" href={contact.socials.github} target="_blank" rel="noopener noreferrer">
+            <h4 className="mt-8 text-xl font-semibold text-text">Let’s connect</h4>
+            <div className="mt-4 flex items-center gap-3">
+              <a className="glass cursor-pointer rounded-full p-3 text-muted transition-all duration-300 hover:scale-110 hover:bg-brand/10 hover:text-text" href={contact.socials.github} target="_blank" rel="noopener noreferrer">
                 <Github size={20} />
               </a>
-              <a className="glass rounded-full p-3 text-muted hover:text-text" href={contact.socials.linkedin} target="_blank" rel="noopener noreferrer">
+              <a className="glass cursor-pointer rounded-full p-3 text-muted transition-all duration-300 hover:scale-110 hover:bg-brand/10 hover:text-text" href={contact.socials.linkedin} target="_blank" rel="noopener noreferrer">
                 <Linkedin size={20} />
               </a>
-              <a className="glass rounded-full p-3 text-muted hover:text-text" href={contact.socials.email}>
+              <a className="glass cursor-pointer rounded-full p-3 text-muted transition-all duration-300 hover:scale-110 hover:bg-brand/10 hover:text-text" href={contact.socials.email}>
                 <Mail size={20} />
               </a>
             </div>
           </aside>
 
-          <form onSubmit={onSubmit} className="glass rounded-2xl p-5 md:p-6">
+          <form onSubmit={onSubmit} className="glass flex h-full flex-col gap-4 rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg md:gap-5 md:p-7">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="block">
                 <span className="mb-2 block text-sm font-medium text-text">Your Name</span>
                 <input
                   name="name"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Your name"
                   value={formData.name}
                   onChange={onChange}
                   className="w-full rounded-xl border border-borderSoft bg-panelSoft px-4 py-3 text-text placeholder:text-muted focus:border-brand focus:outline-none"
@@ -153,7 +153,7 @@ export default function Contact() {
                 <input
                   name="email"
                   type="email"
-                  placeholder="john@example.com"
+                  placeholder="Your email"
                   value={formData.email}
                   onChange={onChange}
                   className="w-full rounded-xl border border-borderSoft bg-panelSoft px-4 py-3 text-text placeholder:text-muted focus:border-brand focus:outline-none"
@@ -161,24 +161,24 @@ export default function Contact() {
               </label>
             </div>
 
-            <label className="mt-3 md:mt-4 block">
+            <label className="block">
               <span className="mb-2 block text-sm font-medium text-text">Subject</span>
               <input
                 name="subject"
                 type="text"
-                placeholder="How can I help you?"
+                placeholder="Subject"
                 value={formData.subject}
                 onChange={onChange}
                 className="w-full rounded-xl border border-borderSoft bg-panelSoft px-4 py-3 text-text placeholder:text-muted focus:border-brand focus:outline-none"
               />
             </label>
 
-            <label className="mt-3 md:mt-4 block">
+            <label className="block">
               <span className="mb-2 block text-sm font-medium text-text">Message</span>
               <textarea
                 name="message"
                 rows="5"
-                placeholder="Your message here..."
+                placeholder="Write your message..."
                 value={formData.message}
                 onChange={onChange}
                 className="w-full rounded-xl border border-borderSoft bg-panelSoft px-4 py-3 text-text placeholder:text-muted focus:border-brand focus:outline-none"
@@ -194,7 +194,7 @@ export default function Contact() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="mt-3 md:mt-4 w-full rounded-xl bg-brand py-3 text-base font-semibold text-white shadow-glow disabled:cursor-not-allowed disabled:opacity-70"
+              className="btn-primary mt-auto w-full rounded-xl py-3 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:scale-[1.01] hover:shadow-[0_14px_34px_rgba(73,97,221,0.42)] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting ? "Sending..." : "Send Message"}
             </button>

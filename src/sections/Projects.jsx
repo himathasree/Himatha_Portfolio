@@ -4,39 +4,50 @@ import { projects } from "../data/siteContent";
 
 export default function Projects() {
   return (
-    <section id="projects" className="section-space">
+    <section id="projects" className="section-space scroll-mt-24">
       <div className="container-base">
         <SectionHeading
           title="Projects"
           subtitle="Highlight selected work and add links to repositories, demos, or case studies."
         />
 
-        <div className="grid gap-7 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {projects.map((project) => (
-            <article key={project.title} className="glass group overflow-hidden rounded-2xl">
-              <div className="h-40 bg-gradient-to-br from-brand to-brandAlt/70" />
+            <article
+              key={project.title}
+              className="glass group flex min-h-[340px] flex-col overflow-hidden rounded-2xl p-0"
+            >
+              {/* Compact header gradient */}
+              <div className="h-24 bg-gradient-to-br from-brand to-brandAlt/70" />
 
-              <div className="p-6">
-                <h3 className="text-3xl font-bold text-text">{project.title}</h3>
-                <p className="mt-4 text-muted">{project.description}</p>
+              {/* Card content */}
+              <div className="flex flex-1 flex-col p-4 pb-3">
+                <h3 className="text-xl font-bold text-text leading-tight">{project.title}</h3>
+                <p className="mt-2 text-sm text-muted line-clamp-3">{project.description}</p>
 
-                <div className="mt-5 flex flex-wrap gap-2">
+                <div className="mt-3 flex flex-wrap gap-1.5">
                   {project.tech.map((tech) => (
-                    <span key={tech} className="rounded-full border border-borderSoft bg-panelSoft px-3 py-1 text-sm text-muted">
+                    <span
+                      key={tech}
+                      className="rounded-full border border-borderSoft bg-panelSoft px-2.5 py-0.5 text-xs text-muted"
+                    >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl border border-borderSoft bg-panelSoft px-4 py-2 font-semibold text-text transition group-hover:border-brand"
-                >
-                  <Github size={18} />
-                  GitHub
-                </a>
+                {/* GitHub button pinned to bottom */}
+                <div className="flex-1 flex items-end">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-2 rounded-xl border border-borderSoft bg-panelSoft px-3 py-1.5 text-sm font-semibold text-text transition group-hover:border-brand"
+                  >
+                    <Github size={16} />
+                    GitHub
+                  </a>
+                </div>
               </div>
             </article>
           ))}

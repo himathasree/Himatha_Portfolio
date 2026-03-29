@@ -1,10 +1,11 @@
-import { Menu, MoonStar, Sun, X } from "lucide-react";
+import { FileDown, Menu, MoonStar, Sun, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { navLinks } from "../data/siteContent";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [activeHref, setActiveHref] = useState("#home");
+  const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(() => {
     if (typeof window === "undefined") {
       return true;
@@ -28,6 +29,17 @@ export default function Navbar() {
   }, [dark]);
 
   useEffect(() => {
+    const updateScrolled = () => {
+      setScrolled(window.scrollY > 12);
+    };
+
+    updateScrolled();
+    window.addEventListener("scroll", updateScrolled, { passive: true });
+
+    return () => window.removeEventListener("scroll", updateScrolled);
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const visibleEntry = entries
@@ -39,7 +51,7 @@ export default function Navbar() {
         }
       },
       {
-        rootMargin: "-45% 0px -45% 0px",
+        rootMargin: "-35% 0px -55% 0px",
         threshold: [0.1, 0.25, 0.4, 0.6],
       }
     );
@@ -54,10 +66,35 @@ export default function Navbar() {
     return () => observer.disconnect();
   }, []);
 
+  const handleNavClick = (event, href) => {
+    event.preventDefault();
+    const section = document.querySelector(href);
+
+    if (!section) {
+      return;
+    }
+
+    const offsetTop = section.getBoundingClientRect().top + window.scrollY - 88;
+    window.scrollTo({ top: offsetTop, behavior: "smooth" });
+    window.history.replaceState(null, "", href);
+    setOpen(false);
+    setActiveHref(href);
+  };
+
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-bg/80 backdrop-blur-xl">
-      <nav className="mx-auto flex h-20 w-full max-w-[1540px] items-center px-6 lg:px-8">
-        <a href="#home" className="text-xl font-bold tracking-tight text-brand font-sora ml-8 shrink-0">
+    <header
+      className={`sticky inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "border-b border-borderSoft/70 bg-bg/80 shadow-[0_10px_30px_rgba(20,28,58,0.22)] backdrop-blur-2xl"
+          : "bg-bg/35"
+      }`}
+    >
+      <nav className="container-base flex h-20 items-center">
+        <a
+          href="#home"
+          onClick={(event) => handleNavClick(event, "#home")}
+          className="text-xl font-bold tracking-tight text-brand font-sora shrink-0"
+        >
           HS.
         </a>
 
@@ -72,10 +109,7 @@ export default function Navbar() {
                       : "text-muted after:w-0"
                   }`}
                   href={link.href}
-                  onClick={() => {
-                    setOpen(false);
-                    setActiveHref(link.href);
-                  }}
+                  onClick={(event) => handleNavClick(event, link.href)}
                 >
                   {link.label}
                 </a>
@@ -92,12 +126,15 @@ export default function Navbar() {
             >
               {dark ? <Sun size={16} /> : <MoonStar size={16} />}
             </button>
-            <a
-              href="#"
-              className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:translate-y-[-1px] font-sora"
-            >
-              Resume
-            </a>
+        
+          <a
+            href="/Himatha_Resume.pdf"
+            download
+            className="btn-primary inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white shadow-glow transition duration-300 hover:-translate-y-0.5 font-sora"
+          >
+            <FileDown size={16} />
+            Resume
+          </a>  
           </div>
         </div>
 
@@ -121,10 +158,7 @@ export default function Navbar() {
                     activeHref === link.href ? "text-text after:w-full" : "text-muted after:w-0"
                   }`}
                   href={link.href}
-                  onClick={() => {
-                    setOpen(false);
-                    setActiveHref(link.href);
-                  }}
+                  onClick={(event) => handleNavClick(event, link.href)}
                 >
                   {link.label}
                 </a>
@@ -132,10 +166,12 @@ export default function Navbar() {
             ))}
             <li>
               <a
-                href="#"
-                className="mt-2 inline-flex rounded-xl bg-brand px-4 py-2 font-semibold text-white"
+                href="/Himatha_Resume.pdf"
+                download
+                className="btn-primary mt-2 inline-flex items-center gap-2 rounded-xl px-4 py-2 font-semibold text-white"
                 onClick={() => setOpen(false)}
               >
+                <FileDown size={16} />
                 Resume
               </a>
             </li>

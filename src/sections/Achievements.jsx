@@ -2,7 +2,7 @@ import SectionHeading from "../components/SectionHeading";
 
 export default function Achievements() {
   return (
-    <section id="achievements" className="section-space">
+    <section id="achievements" className="section-space scroll-mt-24">
       <div className="container-base">
         <SectionHeading
           title="Achievements"

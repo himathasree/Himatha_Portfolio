@@ -4,7 +4,7 @@ import { skills } from "../data/siteContent";
 
 export default function Skills() {
   return (
-    <section id="skills" className="section-space">
+    <section id="skills" className="section-space scroll-mt-24">
       <div className="container-base">
         <SectionHeading
           title="Skills"

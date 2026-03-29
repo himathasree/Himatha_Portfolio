@@ -1,11 +1,112 @@
 import { Github, Linkedin, Mail } from "lucide-react";
 import { motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { hero } from "../data/siteContent";
 
 export default function Hero() {
   const [firstName, lastName] = hero.name.split(" ");
+  const [typedChars, setTypedChars] = useState(0);
+  const [tiltRotate, setTiltRotate] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const cardRef = useRef(null);
   const easing = [0.22, 1, 0.36, 1];
   const entranceDuration = 0.5;
+
+  const codeLines = useMemo(
+    () => [
+      [{ text: "// Software Engineer", className: "text-muted/90" }],
+      [
+        { text: "const ", className: "text-brandAlt" },
+        { text: "developer", className: "text-brand" },
+        { text: " = {", className: "text-muted" },
+      ],
+      [
+        { text: "  name", className: "text-brandAlt" },
+        { text: ": ", className: "text-muted" },
+        { text: `'${hero.name} Vadlamudi',`, className: "text-text" },
+      ],
+      [
+        { text: "  role", className: "text-brandAlt" },
+        { text: ": ", className: "text-muted" },
+        { text: `'${hero.role}',`, className: "text-text" },
+      ],
+      [
+        { text: "  experience", className: "text-brandAlt" },
+        { text: ": ", className: "text-muted" },
+        { text: `'${hero.codeCard.experience}',`, className: "text-text" },
+      ],
+      [
+        { text: "  projects", className: "text-brandAlt" },
+        { text: ": ", className: "text-muted" },
+        { text: `'${hero.codeCard.projectsCount}',`, className: "text-text" },
+      ],
+      [
+        { text: "  location", className: "text-brandAlt" },
+        { text: ": ", className: "text-muted" },
+        { text: `'${hero.codeCard.location}',`, className: "text-text" },
+      ],
+      [
+        { text: "  stack", className: "text-brandAlt" },
+        { text: ": ", className: "text-muted" },
+        { text: "['React', 'Node.js', 'Python']", className: "text-text" },
+      ],
+      [{ text: "};", className: "text-muted" }],
+    ],
+    [hero.codeCard.experience, hero.codeCard.location, hero.codeCard.projectsCount, hero.role, hero.name]
+  );
+
+  const totalTypingChars = useMemo(() => {
+    const charCount = codeLines.reduce(
+      (sum, line) => sum + line.reduce((lineSum, segment) => lineSum + segment.text.length, 0),
+      0
+    );
+    return charCount + Math.max(0, codeLines.length - 1);
+  }, [codeLines]);
+
+  useEffect(() => {
+    setTypedChars(0);
+    const timer = window.setInterval(() => {
+      setTypedChars((current) => (current >= totalTypingChars ? totalTypingChars : current + 1));
+    }, 26);
+
+    return () => window.clearInterval(timer);
+  }, [totalTypingChars]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleCardMouseMove = (event) => {
+    if (isMobile || !cardRef.current) return;
+
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const mouseX = event.clientX - centerX;
+    const mouseY = event.clientY - centerY;
+
+    // Calculate normalized position (-1 to 1)
+    const normalizedX = mouseX / (rect.width / 2);
+    const normalizedY = mouseY / (rect.height / 2);
+
+    // Apply subtle rotation (max 8 degrees on each axis)
+    const rotationIntensity = 8;
+    setTiltRotate({
+      x: -normalizedY * rotationIntensity,
+      y: normalizedX * rotationIntensity,
+    });
+  };
+
+  const handleCardMouseLeave = () => {
+    if (isMobile) return;
+    setTiltRotate({ x: 0, y: 0 });
+  };
 
   const textGroupVariants = {
     hidden: {},
@@ -30,12 +131,12 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="pt-20 md:pt-22">
-      <div className="container-base grid min-h-[calc(100vh-6rem)] grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
+    <section id="home" className="scroll-mt-24">
+      <div className="container-base grid min-h-screen grid-cols-1 items-center gap-8 -translate-y-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-10">
 
         {/* LEFT TEXT SECTION */}
         <motion.div
-          className="w-full max-w-[540px] lg:pt-2"
+          className="w-full max-w-[540px]"
           variants={textGroupVariants}
           initial="hidden"
           animate="visible"
@@ -49,7 +150,7 @@ export default function Hero() {
 
           <motion.div variants={textItemVariants}>
             <h1 className="mt-3 text-[2.5rem] md:text-[3rem] font-extrabold leading-tight text-text font-sora">
-              <span className="text-[#232e47] dark:text-text">{firstName}</span>
+              <span className="text-text">{firstName}</span>
               <span className="text-brand"> {lastName}</span>
             </h1>
           </motion.div>
@@ -71,7 +172,7 @@ export default function Hero() {
 
               <a
                 href="#contact"
-                className="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:translate-y-[-1px] font-sora"
+                className="btn-primary rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 font-sora"
               >
                 {hero.primaryCta}
               </a>
@@ -118,29 +219,52 @@ export default function Hero() {
 
 
         {/* RIGHT CARD SECTION */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.2, ease: easing }}
-          className="relative w-full max-w-[480px] min-h-[300px] justify-self-center lg:min-h-[340px] lg:justify-self-end lg:-translate-y-1"
+        <div
+          ref={cardRef}
+          onMouseMove={handleCardMouseMove}
+          onMouseLeave={handleCardMouseLeave}
+          className="relative w-full max-w-[480px] min-h-[300px] justify-self-center lg:min-h-[340px] lg:justify-self-end"
+          style={{
+            perspective: "1000px",
+            transformStyle: "preserve-3d",
+          }}
         >
-
-          {/* BLUR GLOW */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-0 rounded-2xl bg-blue-400/40 blur-3xl"
-          />
-
-          {/* BACK STACKED CARD */}
           <motion.div
-            aria-hidden="true"
-            animate={{ x: [0, -6, 6, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="pointer-events-none absolute inset-0 z-0 translate-x-[-40px] translate-y-[35px] rotate-[-10deg] scale-95 rounded-2xl border border-[#dce8fb]/30 bg-blue-400/40 dark:border-[#1e2b50]/30 dark:bg-blue-500/30"
-          />
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.2, ease: easing }}
+            className="relative w-full h-full"
+            style={{
+              rotateX: tiltRotate.x,
+              rotateY: tiltRotate.y,
+              transformStyle: "preserve-3d",
+              transition: "rotateX 0.15s cubic-bezier(0.23, 1, 0.320, 1), rotateY 0.15s cubic-bezier(0.23, 1, 0.320, 1)",
+            }}
+          >
 
-          {/* MAIN CARD */}
-          <div className="relative z-10 h-full rounded-2xl border border-[#dce8fb] bg-white p-6 shadow-[0_12px_36px_rgba(99,120,200,0.16)] md:p-8 dark:border-[#1e2b50] dark:bg-[#0d1530]">
+            {/* BLUR GLOW */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 rounded-2xl bg-gradient-to-tr from-brand/35 via-brandAlt/35 to-brand/20 blur-3xl"
+            />
+
+            {/* BACK STACKED CARD */}
+            <motion.div
+              aria-hidden="true"
+              animate={{ x: [0, -6, 6, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="pointer-events-none absolute inset-0 z-0 translate-x-[-40px] translate-y-[35px] rotate-[-10deg] scale-95 rounded-2xl border border-brand/15 bg-gradient-to-tr from-brand/25 to-brandAlt/20"
+            />
+
+            {/* MAIN CARD */}
+            <motion.div
+              whileHover={{ y: isMobile ? -6 : 0 }}
+              transition={{ type: "spring", stiffness: 220, damping: 18 }}
+              className="relative z-10 h-full rounded-2xl border border-brand/20 bg-panel/55 p-6 backdrop-blur-xl shadow-[0_16px_44px_rgba(77,89,182,0.22)] md:p-8"
+              style={{
+                boxShadow: `${Math.sin(tiltRotate.y * (Math.PI / 180)) * 12}px ${Math.sin(tiltRotate.x * (Math.PI / 180)) * 12}px 44px rgba(77, 89, 182, ${0.22 + Math.abs(tiltRotate.x + tiltRotate.y) * 0.01})`,
+              }}
+            >
 
             {/* WINDOW BAR */}
             <div className="mb-5 flex items-center justify-between">
@@ -157,66 +281,45 @@ export default function Hero() {
 
             {/* CODE */}
             <div className="space-y-1.5 font-mono text-sm">
+              {(() => {
+                let consumed = 0;
 
-              <p className="text-[#9ca3af]">// Software Engineer</p>
+                return codeLines.map((line, index) => {
+                  const lineChars = line.reduce((sum, segment) => sum + segment.text.length, 0);
+                  const visibleChars = Math.max(0, Math.min(lineChars, typedChars - consumed));
+                  const isLastLine = index === codeLines.length - 1;
+                  const available = typedChars - consumed;
+                  const showCursor = (available >= 0 && available <= lineChars) || (typedChars >= totalTypingChars && isLastLine);
+                  let remaining = visibleChars;
 
-              <p>
-                <span className="text-[#3b82f6]">const</span>{" "}
-                <span className="text-[#10b981]">developer</span>{" "}
-                <span className="text-[#9ca3af]">= {"{"}</span>
-              </p>
+                  const segments = line.map((segment, segmentIndex) => {
+                    const content = remaining > 0 ? segment.text.slice(0, remaining) : "";
+                    remaining = Math.max(0, remaining - segment.text.length);
 
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <span className="text-[#8b5cf6]">name</span>
-                <span className="text-[#9ca3af]">:</span>{" "}
-                <span className="text-[#f97316]">
-                  'Himatha Sree Vadlamudi'
-                </span>
-                <span className="text-[#9ca3af]">,</span>
-              </p>
+                    return (
+                      <span key={`${index}-${segmentIndex}`} className={segment.className}>
+                        {content}
+                      </span>
+                    );
+                  });
 
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <span className="text-[#8b5cf6]">focus</span>
-                <span className="text-[#9ca3af]">:</span>{" "}
-                <span className="text-[#9ca3af]">[</span>
-                <span className="text-[#f97316]">'Full-Stack'</span>
-                <span className="text-[#9ca3af]">,</span>{" "}
-                <span className="text-[#f97316]">'UI/UX'</span>
-                <span className="text-[#9ca3af]">],</span>
-              </p>
+                  consumed += lineChars + (isLastLine ? 0 : 1);
 
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <span className="text-[#8b5cf6]">stack</span>
-                <span className="text-[#9ca3af]">:</span>{" "}
-                <span className="text-[#9ca3af]">[</span>
-                <span className="text-[#f97316]">'React'</span>
-                <span className="text-[#9ca3af]">,</span>{" "}
-                <span className="text-[#f97316]">'Node.js'</span>
-                <span className="text-[#9ca3af]">,</span>{" "}
-                <span className="text-[#f97316]">'Python'</span>
-                <span className="text-[#9ca3af]">],</span>
-              </p>
-
-              <p>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <span className="text-[#8b5cf6]">mindset</span>
-                <span className="text-[#9ca3af]">:</span>{" "}
-                <span className="text-[#f97316]">'Always learning'</span>
-              </p>
-
-              <p>
-                <span className="text-[#9ca3af]">{"}"}</span>
-                <span className="text-[#9ca3af]">;</span>
-              </p>
-
+                  return (
+                    <p key={index} className="min-h-[1.35rem]">
+                      {segments}
+                      {showCursor ? <span className="typing-cursor" aria-hidden="true" /> : null}
+                    </p>
+                  );
+                });
+              })()}
             </div>
 
-          </div>
+            </motion.div>
 
-        </motion.div>
+          </motion.div>
+
+        </div>
 
       </div>
     </section>
