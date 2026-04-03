@@ -77,7 +77,7 @@ export const about = {
       github: "https://github.com/himathasree",
       linkedin: "https://linkedin.com/in/vhimathasree",
     },
-    resumeLink: "/Resume.pdf",
+    resumeLink: "/Himatha_Resume.pdf",
   },
 };
 
