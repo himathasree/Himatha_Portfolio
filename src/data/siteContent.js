@@ -20,7 +20,7 @@ export const hero = {
   },
   codeCard: {
     filename: "developer.js",
-    experience: "2+ years",
+    experience: "1 year",
     projectsCount: "18+",
     location: "India",
     lines: [
