@@ -3,7 +3,6 @@ import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import ScrollTopButton from "./components/ScrollTopButton";
 import About from "./sections/About";
-import Achievements from "./sections/Achievements";
 import Contact from "./sections/Contact";
 import Hero from "./sections/Hero";
 import Projects from "./sections/Projects";
@@ -26,7 +25,6 @@ export default function App() {
         <About />
         <Projects />
         <Skills />
-        <Achievements />
         <Contact />
       </main>
       <Footer />

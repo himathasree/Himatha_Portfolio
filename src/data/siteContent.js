@@ -3,7 +3,6 @@ export const navLinks = [
   { label: "About", href: "#about" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
-  { label: "Achievements", href: "#achievements" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -110,24 +109,10 @@ export const skills = [
 
 export const projects = [
   {
-    title: "Project One",
+    title: "Hotel Reservation System",
     description:
-      "Write a short overview of this project, the problem solved, and your contribution.",
-    tech: ["React", "Node.js", "MongoDB"],
-    github: "https://github.com/himathasree",
-  },
-  {
-    title: "Project Two",
-    description:
-      "Highlight key features and mention what makes this project interesting.",
-    tech: ["Next.js", "Express", "PostgreSQL"],
-    github: "https://github.com/himathasree",
-  },
-  {
-    title: "Project Three",
-    description:
-      "Add your mobile app, AI app, or favorite hackathon project here.",
-    tech: ["React Native", "Firebase", "Auth"],
+      "A full-stack hotel reservation platform built with React and Spring Boot. It supports room browsing, booking management, customer reservations, and an admin-friendly workflow for managing availability and bookings.",
+    tech: ["React", "Spring Boot", "Java", "REST APIs", "MySQL"],
     github: "https://github.com/himathasree",
   },
 ];
