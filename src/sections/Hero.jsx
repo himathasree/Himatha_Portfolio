@@ -114,8 +114,8 @@ export default function Hero() {
   };
 
   return (
-    <section id="home" className="scroll-mt-24 pt-10 md:pt-16">
-      <div className="container-base flex min-h-[calc(100vh-5rem)] items-center py-8 md:py-12">
+    <section id="home" className="scroll-mt-24 pt-6 md:pt-10">
+      <div className="container-base flex min-h-[calc(100vh-5rem)] -translate-y-4 items-center py-6 md:-translate-y-6 md:py-8">
         <div className="grid w-full items-center gap-10 lg:grid-cols-[1.08fr_0.92fr] lg:gap-12">
           <motion.div
             variants={textGroupVariants}
